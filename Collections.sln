@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseWork.Web", "CourseWork.Web\CourseWork.Web.csproj", "{1FA6F69E-9554-4F14-9AA4-64EF56D412DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseWork.Domain", "CourseWork.Domain\CourseWork.Domain.csproj", "{3BDB76F5-729D-4C19-8076-37CFBD52BE50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseWork.Business", "CourseWork.Business\CourseWork.Business.csproj", "{9B468389-BEC1-4CEB-9D2E-7DCA97736AB2}"
+EndProject
+Global
+    GlobalSection(SolutionConfigurationPlatforms) = preSolution
+        Debug|Any CPU = Debug|Any CPU
+        Release|Any CPU = Release|Any CPU
+    EndGlobalSection
+    GlobalSection(ProjectConfigurationPlatforms) = postSolution
+        {1FA6F69E-9554-4F14-9AA4-64EF56D412DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {1FA6F69E-9554-4F14-9AA4-64EF56D412DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {1FA6F69E-9554-4F14-9AA4-64EF56D412DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {1FA6F69E-9554-4F14-9AA4-64EF56D412DC}.Release|Any CPU.Build.0 = Release|Any CPU
+        {3BDB76F5-729D-4C19-8076-37CFBD52BE50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {3BDB76F5-729D-4C19-8076-37CFBD52BE50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {3BDB76F5-729D-4C19-8076-37CFBD52BE50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {3BDB76F5-729D-4C19-8076-37CFBD52BE50}.Release|Any CPU.Build.0 = Release|Any CPU
+        {9B468389-BEC1-4CEB-9D2E-7DCA97736AB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {9B468389-BEC1-4CEB-9D2E-7DCA97736AB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {9B468389-BEC1-4CEB-9D2E-7DCA97736AB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {9B468389-BEC1-4CEB-9D2E-7DCA97736AB2}.Release|Any CPU.Build.0 = Release|Any CPU
+    EndGlobalSection
+EndGlobal
