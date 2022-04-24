@@ -2,14 +2,16 @@ using System;
 using System.Threading.Tasks;
 using CourseWork.Business.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication.Models;
 
 namespace Collections.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
-        
+
         public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
