@@ -8,20 +8,6 @@
 <link rel="stylesheet" href="~/lib/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css" />
 <link rel="stylesheet" href="~/lib/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.min.css" />
 
-<nav class="mt-2">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a asp-controller="Collection"
-               asp-action="Index"
-               asp-route-page="@Context.Request.Cookies["collectionPage"]"
-               asp-route-userId="@ViewData["userId"]">
-                Collections
-            </a>
-        </li>
-        <li class="breadcrumb-item active">Collection</li>
-    </ol>
-</nav>
-
 <div class="col-5 mt-2 mx-auto">
     <form id="collectionForm"
           class="my-2 needs-validation"
