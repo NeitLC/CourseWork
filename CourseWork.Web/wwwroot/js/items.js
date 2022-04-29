@@ -10,7 +10,7 @@
     [isLikedInput, isCommentedInput, sortOrderInput].forEach(input => {
         input.addEventListener('change', event => {
             const element = event.target;
-            if (element.type == 'checkbox') {
+            if (element.type === 'checkbox') {
                 element.value = element.checked;
             }
             urlSearchParams.set(element.name, element.value);

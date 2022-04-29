@@ -18,7 +18,7 @@ xhr.send();
 
 let files = []
 xhr.onload = function () {
-    if (xhr.status == 200) {
+    if (xhr.status === 200) {
         for (const imageUri of JSON.parse(xhr.response)) {
             files.push({
                 source: imageUri

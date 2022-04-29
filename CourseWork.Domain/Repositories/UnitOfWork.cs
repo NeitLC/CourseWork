@@ -7,41 +7,35 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CourseWork.Domain.Repositories
 {
-    public class UnitOfWork : IUnitOfWork
+    public sealed class UnitOfWork : IUnitOfWork
     {
-        private ApplicationContext _context;
+        private readonly ApplicationContext _context;
         private IRepository<Collection, int> _collectionRepository;
         private IRepository<Comment, int> _commentRepository;
         private IRepository<Image, int> _imageRepository;
         private IRepository<Item, int> _itemRepository;
         private IRepository<Tag, int> _tagRepository;
         private IRepository<User, string> _userRepository;
-        private UserManager<User> _userManager;
-        private RoleManager<IdentityRole> _roleManager;
-        private SignInManager<User> _signInManager;
-        private bool disposed = false;
+        private bool _disposed = false;
+        public UserManager<User> UserManager { get; }
+        public SignInManager<User> SignInManager { get; }
+        public RoleManager<IdentityRole> RoleManager { get; }
         
         public UnitOfWork(
             ApplicationContext context,
             UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _context = context;
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _signInManager = signInManager;
+            UserManager = userManager;
+            SignInManager = signInManager;
+            RoleManager = roleManager;
         }
         
-        public ApplicationContext Context
-        { 
-            get
-            {
-                return _context;
-            }
-        }
-        
-        
+        public ApplicationContext Context => _context;
+
+
         public IRepository<Collection, int> Collections
         {
             get
@@ -96,46 +90,20 @@ namespace CourseWork.Domain.Repositories
                 return _userRepository;
             }
         }
-
-        public UserManager<User> UserManager
-        {
-            get
-            {
-                return _userManager;
-            }
-        }
-
-        public RoleManager<IdentityRole> RoleManager
-        {
-            get
-            {
-                return _roleManager;
-            }
-        }
-
-        public SignInManager<User> SignInManager
-        {
-            get
-            {
-                return _signInManager;
-            }
-        }
         
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
         }
 
-        public virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (_disposed) return;
+            if (disposing)
             {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-                disposed = true;
+                _context.Dispose();
             }
+            _disposed = true;
         }
 
         public void Dispose()

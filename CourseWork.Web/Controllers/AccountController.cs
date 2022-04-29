@@ -1,10 +1,9 @@
 using System;
 using System.Threading.Tasks;
+using Collections.ViewModels;
 using CourseWork.Business.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication.Models;
 
 namespace Collections.Controllers
 {
@@ -44,5 +43,47 @@ namespace Collections.Controllers
             await _accountService.Logout();
             return RedirectToAction("Index", "Home");
         }
+        
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            try
+            {
+                await _accountService.Login(model.Username, model.Password);
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+        
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            try
+            {
+                await _accountService.Register(model.Username, model.Email, model.Password);
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
     }
 }

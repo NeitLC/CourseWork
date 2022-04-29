@@ -7,7 +7,9 @@ namespace CourseWork.Domain.Models
     public class User : IdentityUser, IEntityWithId<string>
     {
         public ICollection<Collection> Collections { get; set; } = new List<Collection>();
+        
         public ICollection<Item> Items  { get; set; } = new List<Item>();
+        
         public ICollection<Comment> Comments  { get; set; } = new List<Comment>();
     }
 }

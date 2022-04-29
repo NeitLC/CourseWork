@@ -1,0 +1,24 @@
+@* @model CourseWork.Domain.Dto.Page *@
+@* *@
+@* @{ *@
+@*     var action = string.IsNullOrEmpty((string) ViewData["action"]) ? "Index" : ViewData["Action"]; *@
+@* } *@
+@* *@
+@* <nav> *@
+@*     <ul class="pagination"> *@
+@*         <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")"> *@
+@*             <a class="page-link"  *@
+@*                asp-action="@action" *@
+@*                asp-route-page="@Model.PageNumber - 1"> *@
+@*                 Previous *@
+@*             </a> *@
+@*         </li> *@
+@*         <li class="page-item @(Model.HasNextPage ? "" : "disabled")"> *@
+@*             <a class="page-link"  *@
+@*                asp-action="@action" *@
+@*                asp-route-page="@Model.PageNumber - 1"> *@
+@*                 Next *@
+@*             </a> *@
+@*         </li> *@
+@*     </ul> *@
+@* </nav> *@

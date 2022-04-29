@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
+using Collections.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using WebApplication.Models;
 
 namespace Collections.Controllers
 {

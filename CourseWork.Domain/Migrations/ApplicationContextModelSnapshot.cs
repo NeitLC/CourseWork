@@ -28,38 +28,45 @@ namespace CourseWork.Domain.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
+                        .HasColumnType("text");
 
                     b.Property<string>("FirstFieldName")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("FirstFieldType")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("SecondFieldName")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("SecondFieldType")
                         .HasColumnType("integer");
 
                     b.Property<string>("ThirdFieldName")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("ThirdFieldType")
                         .HasColumnType("integer");
 
-                    b.Property<string>("UserId1")
+                    b.Property<string>("Topic")
+                        .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(500)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Collections");
                 });
@@ -100,7 +107,19 @@ namespace CourseWork.Domain.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<int>("CollectionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CollectionId");
 
                     b.ToTable("Images");
                 });
@@ -417,9 +436,13 @@ namespace CourseWork.Domain.Migrations
 
             modelBuilder.Entity("CourseWork.Domain.Models.Collection", b =>
                 {
-                    b.HasOne("CourseWork.Domain.Models.User", null)
+                    b.HasOne("CourseWork.Domain.Models.User", "User")
                         .WithMany("Collections")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CourseWork.Domain.Models.Comment", b =>
@@ -439,10 +462,21 @@ namespace CourseWork.Domain.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CourseWork.Domain.Models.Image", b =>
+                {
+                    b.HasOne("CourseWork.Domain.Models.Collection", "Collection")
+                        .WithMany("Images")
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Collection");
+                });
+
             modelBuilder.Entity("CourseWork.Domain.Models.Item", b =>
                 {
                     b.HasOne("CourseWork.Domain.Models.Collection", "Collection")
-                        .WithMany()
+                        .WithMany("Items")
                         .HasForeignKey("CollectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -529,6 +563,13 @@ namespace CourseWork.Domain.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CourseWork.Domain.Models.Collection", b =>
+                {
+                    b.Navigation("Images");
+
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("CourseWork.Domain.Models.Item", b =>

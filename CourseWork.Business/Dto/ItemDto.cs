@@ -58,6 +58,8 @@ namespace CourseWork.Business.Dto
         
         public IEnumerable<Tag> Tags { get; set; }
         
+        public string TagJson { get; set; }
+        
         public EntityPageDto<Comment> Comments { get; set; }
     }
 }

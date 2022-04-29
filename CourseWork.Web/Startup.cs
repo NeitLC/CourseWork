@@ -38,10 +38,10 @@ namespace Collections
                 })
                 .AddEntityFrameworkStores<ApplicationContext>();
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IAccountService, AccountService>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<ICollectionService, CollectionService>();
             // services.AddScoped<IAdminService, AdminService>();
-            // services.AddScoped<ICollectionService, CollectionService>();
             // services.AddScoped<IItemService, ItemService>();
 
             services.Configure<SecurityStampValidatorOptions>(options =>

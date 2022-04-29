@@ -24,15 +24,19 @@ namespace CourseWork.Business.Interfaces
             int page = 1
         );
 
-        EntityPageDto<Tag> GetTags();
+        Task<Item> CreateItem(ItemDto itemDto, ClaimsPrincipal claimsPrincipal, string userId = ""); 
 
-        Task<ItemDto> GetItem(int id);
+        EntityPageDto<Tag> GetTags(string input);
+
+        Task<ItemDto> GetItem(int id, int page = 1, ClaimsPrincipal claimsPrincipal = null);
 
         Task EditItem(int id, ItemDto itemDto, ClaimsPrincipal claimsPrincipal);
 
         Task<int> DeleteItem(int id, ClaimsPrincipal claimsPrincipal);
 
         Task<LikeDto> LikeItem(int id, ClaimsPrincipal claimsPrincipal);
+        
+        Task AddComment(ClaimsPrincipal claimsPrincipal, CommentDto commentDto);
 
         IEnumerable<Item> GetItemsByTag(string tag);
 
@@ -41,6 +45,7 @@ namespace CourseWork.Business.Interfaces
         IEnumerable<Item> GetLastItems();
 
         IEnumerable<Item> GetItemsByText(string text);
+
 
     }
 }

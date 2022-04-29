@@ -1,0 +1,23 @@
+@model CourseWork.Domain.Dto.EntityPageDto<CourseWork.Domain.Models.Collection>
+
+@{
+    Layout = "_Layout";
+}
+
+@if (!Model.Entities.Any() && Model.Page.PageNumber == 1)
+{
+    <div class="col-md-12 text-center mt-5">
+        <h5>Empty</h5>
+    </div>
+}
+else
+{
+    @await Html.PartialAsync("../_Collections", Model)
+    
+    @if (Model.Page.TotalPages > 1)
+    {
+        @await Html.PartialAsync("../_Pagination", Model.Page)
+    }
+}
+
+<script src="~/js/profile.js"></script>

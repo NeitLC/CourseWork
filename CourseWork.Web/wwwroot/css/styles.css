@@ -29,3 +29,13 @@ html, body, #container {
     margin: 0;
     padding: 0;
 }
+
+.modal-header {
+    display: block;
+}
+
+.login .box .social {
+    float:none;
+    margin:0 auto 30px;
+    text-align:center
+}

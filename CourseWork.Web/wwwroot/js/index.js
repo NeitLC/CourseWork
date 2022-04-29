@@ -40,6 +40,6 @@
 
     function disableDarkTheme() {
         DARK_STYLE_LINK.setAttribute("href", "");
-        THEME_TOGGLER.innerHTML = "🌞";
+        THEME_TOGGLER.innerHTML = "☀";
     }
 });

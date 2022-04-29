@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using CourseWork.Domain.Attributes;
 using CourseWork.Domain.Enums;
 using CourseWork.Domain.Interfaces;
 
@@ -12,17 +14,23 @@ namespace CourseWork.Domain.Models
         public int Id { get; set; }
         
         [Required]
-        [StringLength(30)]
+        [StringLength(50)]
         public string Name { get; set; }
         
         [Required]
-        [MaxLength(150)]
         public string Description { get; set; }
         
+        [Required]
+        [Topic(new string[] { "Alcohol", "Books" })]
+        public string Topic { get; set; }
+        
+        [StringLength(50)]
         public string FirstFieldName { get; set; }
         
+        [StringLength(50)]
         public string SecondFieldName { get; set; }
         
+        [StringLength(50)]
         public string ThirdFieldName { get; set; }
         
         public FieldType FirstFieldType { get; set; }
@@ -30,11 +38,15 @@ namespace CourseWork.Domain.Models
         public FieldType SecondFieldType { get; set; }
         
         public FieldType ThirdFieldType { get; set; }
+        
+        [Required]
+        [Column(TypeName = "varchar(500)")]
+        public string UserId { get; set; }
 
-        public int UserId;
-        
-        public User User;
-        
-        public IEnumerable Items = new List<Item>();
+        public User User { get; set; }
+
+        public IEnumerable<Item> Items { get; set; }
+
+        public ICollection<Image> Images { get; set; } = new List<Image>();
     }
 }

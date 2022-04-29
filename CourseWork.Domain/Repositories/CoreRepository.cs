@@ -15,7 +15,7 @@ namespace CourseWork.Domain.Repositories
         IEntityWithId<TId>
         where TContext : DbContext
     {
-        private TContext _context;
+        private readonly TContext _context;
 
         protected CoreRepository(TContext context)
         {
@@ -50,8 +50,8 @@ namespace CourseWork.Domain.Repositories
             
             var count = dbSet.Where(predicate ?? DefaultPredicate).Count();
 
-            var entities = dbSet.IncludeMultiple(includes)
-                .AsEnumerable().Where(predicate ?? DefaultPredicate);
+            var entities = dbSet.IncludeMultiple(includes).AsEnumerable()
+                .Where(predicate ?? DefaultPredicate);
 
             if (sortPredicate != null)
             {
@@ -64,7 +64,7 @@ namespace CourseWork.Domain.Repositories
             
             var entityPageDto = new EntityPageDto<TEntity>
             {
-                Page = new Page(page, pageSize, entities.Count()),
+                Page = new Page(page, pageSize, count),
                 Entities = entities
             };
 

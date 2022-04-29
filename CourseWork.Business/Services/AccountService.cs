@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using CourseWork.Business.Dto;
 using CourseWork.Business.Exсeptions;
 using CourseWork.Business.Interfaces;
-using CourseWork.Business.Models;
 using CourseWork.Domain.Interfaces;
 using CourseWork.Domain.Models;
 using CourseWork.Domain.Utils;
@@ -78,6 +77,25 @@ namespace CourseWork.Business.Services
         public async Task Logout()
         {
             await UnitOfWork.SignInManager.SignOutAsync();
+        }
+        
+        public async Task Login(string username, string password)
+        {
+            await UnitOfWork.SignInManager.PasswordSignInAsync(username, password, false, false);
+        }
+
+        public async Task Register(string username, string email, string password)
+        {
+            var user = new User
+            {
+                UserName = username, Email = email
+            };
+            
+            var result = await UnitOfWork.UserManager.CreateAsync(user, password);
+            if (result.Succeeded)
+            {
+                await UnitOfWork.SignInManager.SignInAsync(user, false);
+            }
         }
     }
 }
