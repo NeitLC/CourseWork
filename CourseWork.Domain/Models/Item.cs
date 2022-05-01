@@ -32,11 +32,14 @@ namespace CourseWork.Domain.Models
 
         public string ThirdOptionalTextField { get; set; }
 
-        [Column(TypeName = "date")] public DateTime? FirstOptionalDateTimeField { get; set; }
+        [Column(TypeName = "date")] 
+        public DateTime? FirstOptionalDateTimeField { get; set; }
 
-        [Column(TypeName = "date")] public DateTime? SecondOptionalDateTimeField { get; set; }
+        [Column(TypeName = "date")] 
+        public DateTime? SecondOptionalDateTimeField { get; set; }
 
-        [Column(TypeName = "date")] public DateTime? ThirdOptionalDateTimeField { get; set; }
+        [Column(TypeName = "date")] 
+        public DateTime? ThirdOptionalDateTimeField { get; set; }
 
         public bool? FirstOptionalBoolField { get; set; }
 

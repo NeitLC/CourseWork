@@ -49,10 +49,21 @@
                                 @if (AuthUtil.CheckRights(User, collection))
                                 {
                                     <div>
-                                        <a class="btn btn-warning btn-sm text-white mb-2" href="#">
+                                        <a class="btn btn-warning btn-sm text-white mb-2"
+                                           asp-controller="Collection"
+                                           asp-action="Edit"
+                                           asp-route-userId="@ViewData["userId"]"
+                                           asp-route-collectionId="@collection.Id"
+                                           title="Edit"
+                                           >
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <form title="Delete">
+                                        <form asp-controller="Collection"
+                                              asp-action="Delete"
+                                              asp-route-userId="@ViewData["userId"]"
+                                              asp-route-collectionId="@collection.Id"
+                                              title="Delete"
+                                              class="d-inline">
                                             <button class="btn btn-danger btn-sm delete-btn" type="submit">
                                                 <i class="bi bi-trash3"></i>
                                             </button>

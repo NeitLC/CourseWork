@@ -33,6 +33,6 @@ namespace CourseWork.Business.Dto
         public User User { get; set; }
         
         public IEnumerable<string> Topics { get; set; }
-
+        
     }
 }

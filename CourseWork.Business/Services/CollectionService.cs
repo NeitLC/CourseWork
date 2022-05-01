@@ -12,6 +12,7 @@ using CourseWork.Business.Interfaces;
 using CourseWork.Business.Utils;
 using CourseWork.Domain.Attributes;
 using CourseWork.Domain.Dto;
+using CourseWork.Domain.Extension;
 using CourseWork.Domain.Interfaces;
 using CourseWork.Domain.Models;
 using Microsoft.AspNetCore.Http;
@@ -90,7 +91,7 @@ namespace CourseWork.Business.Services
 
             var cloudinary = new Cloudinary(account);
             
-            // await DeleteImages(cloudinary, collection);
+            await DeleteImages(cloudinary, collection);
             
             foreach (var file in files)
             {
@@ -149,14 +150,12 @@ namespace CourseWork.Business.Services
             
             collectionDto.User = collection.User;
             
-            MapperUtil.Map<CollectionDto, Collection>(collectionDto);
+            MapperUtil.Map<CollectionDto, Collection>(collectionDto, collection);
             
             UnitOfWork.Collections.Update(collection);
             
             await UploadImages(collection, new List<IFormFile>());
-            
             await UnitOfWork.SaveAsync();
-            
             await transaction.CommitAsync();
         }
 
@@ -187,9 +186,12 @@ namespace CourseWork.Business.Services
                 .ToList();
         }
 
-        public IEnumerable<CollectionDto> GetLargestItemsCount()
+        public IEnumerable<Collection> GetLargestItemsCount()
         {
-            throw new System.NotImplementedException();
+            return UnitOfWork.Context.Collections
+                .IncludeMultiple(collection => collection.Images, collection => collection.User)
+                .OrderByDescending(collection => collection.Items.Count())
+                .Take(8);
         }
 
         public async Task<Collection> CheckRights(ClaimsPrincipal claimsPrincipal, int id)

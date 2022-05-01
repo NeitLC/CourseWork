@@ -32,7 +32,7 @@ namespace CourseWork.Business.Interfaces
 
         EntityPageDto<Collection> GetAllCollections(int page = 1);
         
-        IEnumerable<CollectionDto> GetLargestItemsCount();
+        IEnumerable<Collection> GetLargestItemsCount();
         
         Task<Collection> CheckRights(ClaimsPrincipal claimsPrincipal, int id);
         

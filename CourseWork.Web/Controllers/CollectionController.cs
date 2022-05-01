@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Collections.ViewModels;
 using CourseWork.Business.Dto;
@@ -6,6 +8,7 @@ using CourseWork.Business.Utils;
 using HeyRed.MarkdownSharp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Collections.Controllers
 {
@@ -58,6 +61,66 @@ namespace Collections.Controllers
                 userId
                 );
             return RedirectToAction("Index", new { userId = userId});
+        }
+
+        [HttpGet("/Collection/Edit")]
+        public async Task<IActionResult> Edit([FromQuery(Name = "collectionId")] int collectionId,
+            [FromQuery] string userId = "")
+        {
+            try
+            {
+                var collectionDto = await _collectionService.GetCollection(collectionId);
+                Response.Cookies.Append("collectionId",collectionId.ToString());
+                var collection = MapperUtil.Map<CollectionDto, CollectionViewModel>(collectionDto);
+                await _collectionService.CheckRights(User, collectionId);
+                ViewData["userId"] = userId;
+                return View("Form", collection);
+            }
+            catch
+            {
+                return NotFound();
+            }   
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Edit(
+            CollectionViewModel collectionViewModel, 
+            [FromQuery(Name = "collectionId")] int collectionId, 
+            [FromQuery] string userId = "")
+        {
+            try
+            {
+                collectionViewModel.Id = collectionId;
+                await _collectionService.EditCollection(
+                    MapperUtil.Map<CollectionViewModel, CollectionDto>(collectionViewModel),
+                    User
+                );
+                return RedirectToAction("Index", new { userId = userId });
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromQuery] int collectionId, [FromQuery] string userId = "")
+        {
+            try
+            {
+                await _collectionService.DeleteCollection(collectionId, User);
+                return RedirectToAction("Index", new { userId = userId });
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
+
+        [Route("/Collections/{collectionId}/Images")]
+        public IEnumerable<string> GetImages(int collectionId)
+        {
+            return _collectionService.GetImages(collectionId);
         }
     }
 }
