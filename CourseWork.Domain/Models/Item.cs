@@ -8,53 +8,56 @@ namespace CourseWork.Domain.Models
 {
     public class Item : IEntityWithId<int>
     {
-        [Key] public int Id { get; set; }
-
-        [Required] [StringLength(30)] public string Name { get; set; }
-
-        public int Likes { get; set; }
-
-        public int? FirstOptionalNumberField { get; set; }
-
-        public int? SecondOptionalNumberField { get; set; }
-
-        public int? ThirdOptionalNumberField { get; set; }
-
-        public string FirstOptionalStringField { get; set; }
-
-        public string SecondOptionalStringField { get; set; }
-
-        public string ThirdOptionalStringField { get; set; }
-
-        public string FirstOptionalTextField { get; set; }
-
-        public string SecondOptionalTextField { get; set; }
-
-        public string ThirdOptionalTextField { get; set; }
-
-        [Column(TypeName = "date")] 
-        public DateTime? FirstOptionalDateTimeField { get; set; }
-
-        [Column(TypeName = "date")] 
-        public DateTime? SecondOptionalDateTimeField { get; set; }
-
-        [Column(TypeName = "date")] 
-        public DateTime? ThirdOptionalDateTimeField { get; set; }
-
-        public bool? FirstOptionalBoolField { get; set; }
-
-        public bool? SecondOptionalBoolField { get; set; }
-
-        public bool? ThirdOptionalBoolField { get; set; }
-
-        public int CollectionId { get; set; }
-
-        public Collection Collection { get; set; }
-
-        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
-
-        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
-
+        [Key]
+        public int Id { get; set; }
+        
+        [Required]
+        [StringLength(50)]
+        public string Name { get; set; }
+        
+        public int Likes { get; set; } = 0;
+        
+        public int? FirstInteger { get; set; }
+        
+        public int? SecondInteger { get; set; }
+        
+        public int? ThirdInteger { get; set; }
+        
+        public string FirstString { get; set; }
+        
+        public string SecondString { get; set; }
+        
+        public string ThirdString { get; set; }
+        
+        public string FirstText{ get; set; }
+        
+        public string SecondText { get; set; }
+        
+        public string ThirdText { get; set; }
+        
+        [Column(TypeName = "date")]
+        public DateTime? FirstDate { get; set; }
+        
+        [Column(TypeName = "date")]
+        public DateTime? SecondDate { get; set; }
+        
+        [Column(TypeName = "date")]
+        public DateTime? ThirdDate { get; set; }
+        
+        public bool? FirstBoolean { get; set; }
+        
+        public bool? SecondBoolean { get; set; }
+        
+        public bool? ThirdBoolean { get; set; }
+        
         public ICollection<User> UsersLiked { get; set; } = new List<User>();
+        
+        public int CollectionId { get; set; }
+        
+        public Collection Collection { get; set; }
+        
+        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
+        
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

@@ -93,13 +93,11 @@ namespace CourseWork.Business.Services
             
             await DeleteImages(cloudinary, collection);
             
-            foreach (var file in files)
+            foreach (var uploadResult in files.Select(file => cloudinary.Upload(new ImageUploadParams()
+                     {
+                         File = new FileDescription(file.FileName, file.OpenReadStream())
+                     })))
             {
-                var uploadResult = cloudinary.Upload(new ImageUploadParams()
-                {
-                    File = new FileDescription(file.FileName, file.OpenReadStream())
-                });
-                
                 UnitOfWork.Images.Add(new Image
                 {
                     ImagePath = uploadResult.SecureUrl.AbsoluteUri,
@@ -161,9 +159,12 @@ namespace CourseWork.Business.Services
 
         public async Task DeleteCollection(int id, ClaimsPrincipal claimsPrincipal)
         {
-            await using var transaction = await UnitOfWork.Context.Database.BeginTransactionAsync();
             var collection = await CheckRights(claimsPrincipal, id);
+            
+            await using var transaction = await UnitOfWork.Context.Database.BeginTransactionAsync();
+            
             await UploadImages(collection, new List<IFormFile>());
+            
             await UnitOfWork.Collections.Delete(id);
             await UnitOfWork.SaveAsync();
             await transaction.CommitAsync();

@@ -14,7 +14,7 @@ namespace CourseWork.Domain.Models
         
         public DateTime DateOfCreation { get; set; } = DateTime.UtcNow;
         
-        public int UserId;
+        public string UserId { get; set; }
         
         public User User { get; set; }
         

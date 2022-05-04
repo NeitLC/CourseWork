@@ -1,0 +1,46 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model CourseWork.Domain.Dto.EntityPageDto<CourseWork.Domain.Models.Item>
+
+@inject IViewLocalizer Localizer
+
+@{
+    Layout = "_Layout";
+    ViewData["pageNotExist"] = !Model.Entities.Any() && Model.Page.PageNumber == 1;
+}
+
+@functions{
+
+    private static string CheckBackUrl(string back, string url)
+    {
+        return string.IsNullOrEmpty(back) ? url : back;
+    }
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="row mt-3">
+        <div class="col-12">
+            <nav class="mt-2">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="@(CheckBackUrl((string)ViewData["controller"], "Collection"))"
+                           asp-action="@(CheckBackUrl((string)ViewData["action"], "Index"))"
+                           asp-route-page="@Context.Request.Cookies["collectionPage"]"
+                           asp-route-userId="@ViewData["userId"]">
+                            @Localizer["Collections"]
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">@Localizer["Items"]</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+}
+
+@await Html.PartialAsync("../_Items", Model)
+@if (!(bool)ViewData["pageNotExist"] && Model.Page.TotalPages > 1)
+{
+    @await Html.PartialAsync("../_Pagination", Model.Page)
+}
+
+<script src="~/js/profile.js"></script>

@@ -1,0 +1,62 @@
+﻿@using Collections.Helpers
+@using Microsoft.AspNetCore.Mvc.Localization
+@model Collections.ViewModels.ItemViewModel
+
+@inject IViewLocalizer Localizer
+
+@{
+    Layout = "_Layout";
+}
+
+<nav class="mt-2">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a asp-controller="Collection"
+               asp-action="Index"
+               asp-route-page="@Context.Request.Cookies["collectionPage"]"
+               asp-route-userId="@ViewData["userId"]">
+                @Localizer["Collections"]
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-action="Index"
+               asp-route-collectionId="@Model.Collection.Id"
+               asp-route-page="@Context.Request.Cookies["itemPage"]"
+               asp-route-isLiked="@Context.Request.Cookies["isLiked"]"
+               asp-route-isCommented="@Context.Request.Cookies["isCommented"]"
+               asp-route-sortOrder="@Context.Request.Cookies["sortOrder"]"
+               asp-route-userId="@ViewData["userId"]">
+                @Localizer["Items"]
+            </a>
+        </li>
+        <li class="breadcrumb-item active">@Localizer["Item"]</li>
+    </ol>
+</nav>
+
+<link rel="stylesheet" href="~/lib/tagify/tagify.min.css" />
+
+<div class="col-5 mx-auto">
+    <form id="collectionForm"
+          asp-route-userId="@ViewData["userId"]"
+          class="my-2 needs-validation"
+          method="post"
+          novalidate>
+        <div class="mb-3">
+            <label class="form-label" asp-for="Name">@Localizer["Name"]</label>
+            <input type="text" class="form-control" asp-for="Name" required />
+            <span asp-validation-for="Name"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" asp-for="TagsJson">@Localizer["Tags"]</label>
+            <input id="tagsInput" asp-for="TagsJson" value="@Model.TagsJson" required />
+            <span asp-validation-for="TagsJson"></span>
+        </div>
+        @Html.AddExtraFields(Model)
+        <div class="mb-3 pb-3">
+            <button class="btn btn-primary d-block mx-auto w-50" type="submit">@Localizer["Submit"]</button>
+        </div>
+    </form>
+</div>
+
+<script src="~/lib/tagify/tagify.min.js"></script>
+<script src="~/js/create-item.js"></script>

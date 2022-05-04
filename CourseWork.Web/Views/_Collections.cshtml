@@ -1,7 +1,7 @@
 @using CourseWork.Business.Utils
 @model CourseWork.Domain.Dto.EntityPageDto<CourseWork.Domain.Models.Collection>
 
-@{int i = 0;}
+@{var i = 0;}
 @foreach (var collection in Model.Entities)
 {
     <div class="row mt-2">
@@ -13,7 +13,7 @@
                         {
                             <div id="carouselControls@(i)" class="carousel slide h-75" data-interval="false">
                                 <div class="carousel-inner h-75">
-                                    @{int j = 0;}
+                                    @{var j = 0;}
                                     @foreach (var image in collection.Images)
                                     {
                                         <div class="carousel-item @(j == 0 ? "active" : "") h-75">
@@ -64,7 +64,7 @@
                                               asp-route-collectionId="@collection.Id"
                                               title="Delete"
                                               class="d-inline">
-                                            <button class="btn btn-danger btn-sm delete-btn" type="submit">
+                                            <button class="btn btn-danger btn-sm delete-btn" type="submit" title="Delete">
                                                 <i class="bi bi-trash3"></i>
                                             </button>
                                         </form>
@@ -76,7 +76,14 @@
                             @Html.Raw(collection.Description)
                             <div class="d-flex justify-content-between align-items-center mt-auto">
                                 <div class="btn-group mt-1">
-                                    <a class="btn btn-sm btn-outline-secondary d-block" href="#">
+                                    <a class="btn btn-sm btn-outline-secondary d-block"
+                                       asp-controller="Item"
+                                       asp-action="Index"
+                                       asp-route-collectionId="@collection.Id"
+                                       asp-route-userId="@ViewData["userId"]"
+                                       asp-route-backController="@ViewData["controller"]"
+                                       asp-route-backAction="@ViewData["action"]"
+                                       asp-route-page="1">
                                         View
                                     </a>
                                 </div>

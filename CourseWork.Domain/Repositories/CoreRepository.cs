@@ -45,7 +45,6 @@ namespace CourseWork.Domain.Repositories
             params Expression<Func<TEntity, object>>[] includes)
         {
             var dbSet = _context.Set<TEntity>();
-
             bool DefaultPredicate(TEntity entity) => true;
             
             var count = dbSet.Where(predicate ?? DefaultPredicate).Count();

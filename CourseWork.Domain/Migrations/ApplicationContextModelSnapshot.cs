@@ -88,14 +88,14 @@ namespace CourseWork.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ItemId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -134,19 +134,19 @@ namespace CourseWork.Domain.Migrations
                     b.Property<int>("CollectionId")
                         .HasColumnType("integer");
 
-                    b.Property<bool?>("FirstOptionalBoolField")
+                    b.Property<bool?>("FirstBoolean")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("FirstOptionalDateTimeField")
+                    b.Property<DateTime?>("FirstDate")
                         .HasColumnType("date");
 
-                    b.Property<int?>("FirstOptionalNumberField")
+                    b.Property<int?>("FirstInteger")
                         .HasColumnType("integer");
 
-                    b.Property<string>("FirstOptionalStringField")
+                    b.Property<string>("FirstString")
                         .HasColumnType("text");
 
-                    b.Property<string>("FirstOptionalTextField")
+                    b.Property<string>("FirstText")
                         .HasColumnType("text");
 
                     b.Property<int>("Likes")
@@ -154,37 +154,37 @@ namespace CourseWork.Domain.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                    b.Property<bool?>("SecondOptionalBoolField")
+                    b.Property<bool?>("SecondBoolean")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("SecondOptionalDateTimeField")
+                    b.Property<DateTime?>("SecondDate")
                         .HasColumnType("date");
 
-                    b.Property<int?>("SecondOptionalNumberField")
+                    b.Property<int?>("SecondInteger")
                         .HasColumnType("integer");
 
-                    b.Property<string>("SecondOptionalStringField")
+                    b.Property<string>("SecondString")
                         .HasColumnType("text");
 
-                    b.Property<string>("SecondOptionalTextField")
+                    b.Property<string>("SecondText")
                         .HasColumnType("text");
 
-                    b.Property<bool?>("ThirdOptionalBoolField")
+                    b.Property<bool?>("ThirdBoolean")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("ThirdOptionalDateTimeField")
+                    b.Property<DateTime?>("ThirdDate")
                         .HasColumnType("date");
 
-                    b.Property<int?>("ThirdOptionalNumberField")
+                    b.Property<int?>("ThirdInteger")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ThirdOptionalStringField")
+                    b.Property<string>("ThirdString")
                         .HasColumnType("text");
 
-                    b.Property<string>("ThirdOptionalTextField")
+                    b.Property<string>("ThirdText")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -455,7 +455,7 @@ namespace CourseWork.Domain.Migrations
 
                     b.HasOne("CourseWork.Domain.Models.User", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Item");
 

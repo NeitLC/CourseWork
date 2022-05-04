@@ -1,4 +1,5 @@
 using System;
+using Collections.Hubs;
 using CourseWork.Business.Interfaces;
 using CourseWork.Business.Services;
 using CourseWork.Domain.Data;
@@ -41,8 +42,8 @@ namespace Collections
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<ICollectionService, CollectionService>();
+            services.AddTransient<IItemService, ItemService>();
             // services.AddScoped<IAdminService, AdminService>();
-            // services.AddScoped<IItemService, ItemService>();
 
             services.Configure<SecurityStampValidatorOptions>(options =>
             {
@@ -68,7 +69,7 @@ namespace Collections
                 //     redditOptions.SignInScheme = IdentityConstants.ExternalScheme;
                 // });
             
-            // services.AddSignalR();
+            services.AddSignalR();
             
             services.ConfigureApplicationCookie(options =>
             {
@@ -108,7 +109,7 @@ namespace Collections
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}");
-                // endpoints.MapHub<CommentHub>("/comments");
+                endpoints.MapHub<CommentHub>("/comments");
             });
         }
     }

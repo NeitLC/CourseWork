@@ -4,16 +4,16 @@ using System.ComponentModel.DataAnnotations;
 using CourseWork.Domain.Dto;
 using CourseWork.Domain.Models;
 
-namespace CourseWork.Business.Dto
+namespace Collections.ViewModels
 {
-    public class ItemDto
+    public class ItemViewModel
     {
         public int? Id { get; set; }
         
         [StringLength(50)]
         public string Name { get; set; }
         
-        public int likes { get; set; } = 0;
+        public int LikesCount { get; set; } = 0;
         
         public int? FirstInteger { get; set; }
         
@@ -46,9 +46,9 @@ namespace CourseWork.Business.Dto
         
         public bool? SecondBoolean { get; set; }
         
-        public IEnumerable<Tag> Tags { get; set; }
-        
         public bool? ThirdBoolean { get; set; }
+        
+        public IEnumerable<Tag> Tags { get; set; }
         
         public string TagsJson { get; set; }
         

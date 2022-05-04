@@ -1,21 +1,20 @@
+﻿using AutoMapper;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AutoMapper;
 using CourseWork.Business.Dto;
 using CourseWork.Business.Enums;
 using CourseWork.Business.Interfaces;
 using CourseWork.Business.Models;
 using CourseWork.Business.Utils;
 using CourseWork.Domain.Dto;
+using CourseWork.Domain.Extension;
 using CourseWork.Domain.Interfaces;
 using CourseWork.Domain.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CourseWork.Business.Services
 {
@@ -23,117 +22,243 @@ namespace CourseWork.Business.Services
     {
         public IUnitOfWork UnitOfWork { get; }
 
-        private readonly AccountService _accountService;
-        private CollectionService _collectionService;
+        private readonly IAccountService _accountService;
 
-        public ItemService(AccountService accountService, CollectionService collectionService, IUnitOfWork unitOfWork)
+        private readonly ICollectionService _collectionService;
+
+        public ItemService(
+            IUnitOfWork unitOfWork,
+            IAccountService accountService,
+            ICollectionService collectionService)
         {
+            UnitOfWork = unitOfWork;
             _accountService = accountService;
             _collectionService = collectionService;
-            UnitOfWork = unitOfWork;
         }
 
-        public Task<EntityPageDto<Item>> GetItems(
+        public async Task<EntityPageDto<Item>> GetItems(
             int collectionId,
             ClaimsPrincipal userPrincipal,
+            int page= 1,
+            ItemSort sortState = ItemSort.Default,
             bool isLiked = false,
-            bool isCommented = false,
-            ItemSort itemSort = default,
-            int pageSize = 10,
-            int page = 1)
+            bool isCommented = false)
         {
-            throw new System.NotImplementedException();
+            var currentUser = await _accountService.GetCurrentUser(userPrincipal);
+            var collection = await UnitOfWork.Collections.Get(collectionId);
+            Func<Item, bool> predicate = item => item.CollectionId == collection.Id;
+            if (currentUser != null && (isLiked || isCommented))
+            {
+                predicate = item =>
+                {
+                    var expression = item.CollectionId == collection.Id;
+                    if (isLiked)
+                    {
+                        expression &= item.UsersLiked.Contains(currentUser);
+                    }
+                    if (isCommented)
+                    {
+                        expression &= item.Comments.Any(
+                            comment => comment.UserId == currentUser.Id);
+                    }
+                    return expression;
+                };
+            }
+            Func<Item, object> sortPredicate = null;
+            if (sortState == ItemSort.Like)
+            {
+                sortPredicate = item => item.UsersLiked.Count();
+            }
+            return UnitOfWork.Items.Paginate(
+                page: page,
+                predicate: predicate,
+                sortPredicate: sortPredicate,
+                includes: new Expression<Func<Item, object>>[] {
+                    item => item.Tags,
+                    item => item.Comments,
+                    item => item.UsersLiked
+                });
         }
 
-        public Task<Item> CreateItem(
+        private static IEnumerable<TagModel> DeserializeTags(string json)
+        {
+            return JsonSerializer.Deserialize<IEnumerable<TagModel>>(json);
+        }
+
+        private async Task AddTags(Item model, IEnumerable<TagModel> tags)
+        {
+            foreach (var newTag in tags)
+            {
+                var existingTags = UnitOfWork.Tags.Find(tag => tag.Name == newTag.value).ToList();
+                model.Tags.Add(!existingTags.Any() ? new Tag() {Name = newTag.value} : existingTags.First());
+            }
+            await UnitOfWork.SaveAsync();
+        }
+
+        public async Task CreateItem(
+            ClaimsPrincipal userPrincipal,
             ItemDto itemDto,
-            ClaimsPrincipal claimsPrincipal,
             string userId = "")
         {
-            throw new System.NotImplementedException();
+            if (itemDto.CollectionId != null)
+                await _collectionService.CheckRights(userPrincipal, (int) (itemDto.CollectionId));
+            
+            var tags = DeserializeTags(itemDto.TagsJson);
+            
+            await using var transaction = await UnitOfWork.Context.Database.BeginTransactionAsync();
+            
+            var model = MapperUtil.Map<ItemDto, Item>(itemDto);
+            
+            UnitOfWork.Items.Add(model);
+            
+            await UnitOfWork.SaveAsync();
+            await AddTags(model, tags);
+            await transaction.CommitAsync();
         }
-
+        
         public EntityPageDto<Tag> GetTags(string input)
         {
             return UnitOfWork.Tags.Paginate(predicate: tag => tag.Name.Contains(input));
         }
 
-        public async Task<ItemDto> GetItem(int id, int page = 1, ClaimsPrincipal claimsPrincipal = null)
+        public async Task<ItemDto> GetItem(
+            int itemId,
+            int page = 1,
+            ClaimsPrincipal claimsPrincipal=null)
         {
             var item = await UnitOfWork.Items.Get(
-                id, 
+                itemId,
                 item => item.Collection,
                 item => item.UsersLiked,
-                item => item.Tags
-                );
-
-            var mapperConfiguration = new MapperConfiguration(cfg => cfg.CreateMap<Item, ItemDto>()
-                .ForMember(item => item.Comments,
-                    opt => opt.Ignore()));
-
-            var itemDto = MapperUtil.Map<Item, ItemDto>(item, mapperConfiguration: mapperConfiguration);
-
+                item => item.Tags);
+            
+            var mapperConf = new MapperConfiguration(
+                    cfg => cfg.CreateMap<Item, ItemDto>()
+                    .ForMember(item => item.Comments, opt => opt.Ignore()));
+            
+            var itemDto = MapperUtil.Map<Item, ItemDto>(item, mapperConfiguration: mapperConf);
             itemDto.Comments = UnitOfWork.Comments.Paginate(page: page,
                 predicate: comment => item.Comments.Contains(comment),
-                includes: new Expression<Func<Comment, object>>[]
-                {
-                    comment => comment.User 
+                includes: new Expression<Func<Comment, object>>[] {
+                    comment => comment.User
                 });
-
+            
             if (claimsPrincipal != null)
             {
                 var user = await _accountService.GetCurrentUser(claimsPrincipal);
                 itemDto.Liked = item.UsersLiked.Contains(user);
             }
-
-            var tags = item.Tags.Select(item => new TagModel()
-            {
-                Value = item.Name
-            });
             
-            itemDto.TagJson = JsonSerializer.Serialize<IEnumerable<TagModel>>(tags);
-
+            var tags = item.Tags.Select(
+                item => new TagModel() { value = item.Name });
+            
+            itemDto.TagsJson = JsonSerializer.Serialize<IEnumerable<TagModel>>(tags);
+            
             return itemDto;
         }
 
-        public Task EditItem(int id, ItemDto itemDto, ClaimsPrincipal claimsPrincipal)
+        public async Task EditItem(ClaimsPrincipal claimsPrincipal, ItemDto itemDto)
         {
-            throw new System.NotImplementedException();
+            if (itemDto.CollectionId != null)
+                await _collectionService.CheckRights(claimsPrincipal, (int) (itemDto.CollectionId));
+            
+            await using var transaction = await UnitOfWork.Context.Database.BeginTransactionAsync();
+            
+            var model = MapperUtil.Map<ItemDto, Item>(itemDto);
+            UnitOfWork.Items.Update(model);
+            await UnitOfWork.SaveAsync();
+            
+            model = await UnitOfWork.Items.Get(model.Id, item => item.Tags);
+            
+            var tags = DeserializeTags(itemDto.TagsJson);
+            
+            model.Tags.Clear();
+            await AddTags(model, tags);
+            await transaction.CommitAsync();
         }
 
-        public Task<int> DeleteItem(int id, ClaimsPrincipal claimsPrincipal)
+        public async Task<int> DeleteItem(ClaimsPrincipal claimsPrincipal, int itemId)
         {
-            throw new System.NotImplementedException();
+            var item = await GetItem(itemId);
+
+            var collectionId = (int) item.CollectionId;
+            
+            await _collectionService.CheckRights(claimsPrincipal, collectionId);
+            await UnitOfWork.Items.Delete(itemId);
+            await UnitOfWork.SaveAsync();
+            
+            return collectionId;
         }
 
-        public Task<LikeDto> LikeItem(int id, ClaimsPrincipal claimsPrincipal)
+        public async Task<LikeDto> LikeItem(ClaimsPrincipal claimsPrincipal, int itemId)
         {
-            throw new System.NotImplementedException();
+            var user = await _accountService.GetCurrentUser(claimsPrincipal);
+            var item = await UnitOfWork.Items.Get(itemId, item => item.UsersLiked);
+            var likeDto = new LikeDto();
+            if (item.UsersLiked.Contains(user))
+            {
+                item.UsersLiked.Remove(user);
+                likeDto.Liked = false;
+                item.Likes -= 1;
+            }
+            else
+            {
+                item.UsersLiked.Add(user);
+                likeDto.Liked = true;
+                item.Likes += 1;
+            }
+            likeDto.Count = item.Likes;
+            await UnitOfWork.SaveAsync();
+            return likeDto;
         }
 
-        public IEnumerable<Item> GetItemsByTag(string tag)
+        public async Task AddComment(ClaimsPrincipal claimsPrincipal, CommentDto commentDto)
         {
-            throw new System.NotImplementedException();
+            var user = await _accountService.GetCurrentUser(claimsPrincipal);
+            var item = await UnitOfWork.Items.Get(commentDto.ItemId);
+            
+            UnitOfWork.Comments.Add(new Comment() 
+            { 
+                ItemId = item.Id,
+                Text = commentDto.Text,
+                UserId = user.Id
+            });
+            await UnitOfWork.SaveAsync();
+        }
+
+        public IEnumerable<Item> GetLastCreatedItems()
+        {
+            return UnitOfWork.Context.Items.IncludeMultiple(
+                item => item.UsersLiked,
+                item => item.Tags,
+                item => item.Collection)
+                .AsEnumerable()
+                .TakeLast(3)
+                .Reverse();
         }
 
         public IEnumerable<TagDto> GetTagsCloud()
         {
-            throw new System.NotImplementedException();
+            var tags = UnitOfWork.Tags.Find(tag => tag.Items.Any(), tag => tag.Items);
+            return tags.Select(tag => new TagDto() 
+                {Name = tag.Name, Count = UnitOfWork.Items.Find(item => item.Tags.Contains(tag)).Count()}).ToList();
         }
 
-        public IEnumerable<Item> GetLastItems()
+        public IEnumerable<Item> GetItemsByTag(string tag)
         {
-            throw new System.NotImplementedException();
+            return UnitOfWork.Items.Find(
+                item => item.Tags.Any(itemTag => itemTag.Name == tag),
+                includes: new Expression<Func<Item, object>>[] {
+                    item => item.Collection,
+                    item => item.Tags,
+                    item => item.Comments,
+                    item => item.UsersLiked
+                });
         }
 
-        public IEnumerable<Item> GetItemsByText(string text)
+        public IEnumerable<Item> GetItemsFullTextSearch(string query)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public Task AddComment(ClaimsPrincipal claimsPrincipal, CommentDto commentDto)
-        {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }
