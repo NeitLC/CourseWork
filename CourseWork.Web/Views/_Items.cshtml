@@ -102,7 +102,7 @@
                                             </form>
                                         </div>
                                     }
-                                    @* @await Html.PartialAsync("../_Author", item.Collection.User) *@
+                                    @await Html.PartialAsync("../_Author", item.Collection.User)
                                     <p title="Tags" class="mb-0">
                                         <i class="collection-topic">
                                             @Localizer["Tags"]:
@@ -110,7 +110,6 @@
                                             {
                                                 @(tag.Name + " ")
                                             }
-                                            @item.Tags.Count
                                         </i>
                                     </p>
                                     <p title="Sections" class="mb-0">

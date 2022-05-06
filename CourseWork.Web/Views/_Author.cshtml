@@ -1,0 +1,14 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model CourseWork.Domain.Models.User
+
+@inject IViewLocalizer Localizer
+
+<p class="mb-0">
+    <i class="collection-topic">@Localizer["AuthorUsername"]: @Model.UserName</i>
+</p>
+@if (Model.Email != null)
+{
+    <p class="mb-0">
+        <i class="collection-topic">@Localizer["Email"]: @Model.Email</i>
+    </p>
+}

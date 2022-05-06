@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CourseWork.Domain.Repositories
 {
-    public abstract class CoreRepository<TEntity, TContext, TId> : IRepository<TEntity, TId> where TEntity : class,
-        IEntityWithId<TId>
+    public abstract class CoreRepository<TEntity, TContext, TId> : IRepository<TEntity, TId>
+        where TEntity : class, IEntityWithId<TId>
         where TContext : DbContext
     {
         private readonly TContext _context;
@@ -21,61 +21,6 @@ namespace CourseWork.Domain.Repositories
         {
             _context = context;
         }
-
-        public async Task<IEnumerable<TEntity>> GetAll(params Expression<Func<TEntity, object>>[] includes)
-        {
-            return await _context.Set<TEntity>()
-                .IncludeMultiple(includes)
-                .ToListAsync();
-        }
-
-        public async Task<TEntity> Get(TId id, params Expression<Func<TEntity, object>>[] includes)
-        {
-            return await _context.Set<TEntity>()
-                .IncludeMultiple(includes)
-                .SingleOrDefaultAsync(entity => entity.Id.Equals(id));
-        }
-        
-        public EntityPageDto<TEntity> Paginate(
-            int pageSize = 10,
-            int page = 1,
-            Func<TEntity, bool> predicate = null,
-            Sort sort = Enums.Sort.Desc,
-            Func<TEntity, object> sortPredicate = null,
-            params Expression<Func<TEntity, object>>[] includes)
-        {
-            var dbSet = _context.Set<TEntity>();
-            bool DefaultPredicate(TEntity entity) => true;
-            
-            var count = dbSet.Where(predicate ?? DefaultPredicate).Count();
-
-            var entities = dbSet.IncludeMultiple(includes).AsEnumerable()
-                .Where(predicate ?? DefaultPredicate);
-
-            if (sortPredicate != null)
-            {
-                entities = Sort(entities, sortPredicate: sortPredicate);
-            }
-
-            entities = entities.Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-            
-            var entityPageDto = new EntityPageDto<TEntity>
-            {
-                Page = new Page(page, pageSize, count),
-                Entities = entities
-            };
-
-            return entityPageDto;
-        }
-        
-        public TEntity Update(TEntity entity)
-        {
-            _context.Entry(entity).State = EntityState.Modified;
-            return entity;
-        }
-
         public TEntity Add(TEntity entity)
         {
             _context.Set<TEntity>().Add(entity);
@@ -89,7 +34,6 @@ namespace CourseWork.Domain.Repositories
             {
                 _context.Set<TEntity>().Remove(entity);
             }
-
             return entity;
         }
 
@@ -98,16 +42,32 @@ namespace CourseWork.Domain.Repositories
             params Expression<Func<TEntity, object>>[] includes)
         {
             return _context.Set<TEntity>()
-                .IncludeMultiple(includes)
-                .AsEnumerable().Where(predicate)
+                .IncludeMultiple(includes).AsEnumerable()
+                .Where(predicate)
                 .ToList();
         }
 
-        private IEnumerable<TEntity> Sort(
+        public async Task<TEntity> Get(
+            TId id,
+            params Expression<Func<TEntity, object>>[] includes)
+        {
+            return await _context.Set<TEntity>()
+                .IncludeMultiple(includes)
+                .SingleOrDefaultAsync(entity => entity.Id.Equals(id));
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAll(
+            params Expression<Func<TEntity, object>>[] includes)
+        {
+            return await _context.Set<TEntity>()
+                .IncludeMultiple(includes)
+                .ToListAsync();
+        }
+
+        private static IEnumerable<TEntity> Sort(
             IEnumerable<TEntity> entities,
-            Func<TEntity, object> sortPredicate = null,
-            Sort sort = Enums.Sort.Desc
-            )
+            Sort sort = Enums.Sort.Desc,
+            Func<TEntity, object> sortPredicate = null)
         {
             if (sort == Enums.Sort.Asc)
             {
@@ -117,8 +77,44 @@ namespace CourseWork.Domain.Repositories
             {
                 if (sortPredicate != null) entities = entities.OrderByDescending(sortPredicate);
             }
-
             return entities;
+        }
+
+        public EntityPageDto<TEntity> Paginate(
+            int pageSize = 10,
+            int page = 1,
+            Func<TEntity, bool> predicate = null,
+            Sort sort = Enums.Sort.Desc,
+            Func<TEntity, object> sortPredicate = null,
+            params Expression<Func<TEntity, object>>[] includes)
+        {
+            var dbSet = _context.Set<TEntity>();
+            
+            bool DefaultPredicate(TEntity entity) => true;
+            
+            var count = dbSet.Where(predicate ?? DefaultPredicate).Count();
+            var entities = dbSet.IncludeMultiple(includes).AsEnumerable()
+                .Where(predicate ?? DefaultPredicate);
+            
+            if (sortPredicate != null)
+            {
+                entities = Sort(entities, sortPredicate: sortPredicate);
+            }
+            entities = entities.Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            
+            return new EntityPageDto<TEntity>
+            {
+                Page = new Page(count, page, pageSize),
+                Entities = entities
+            };
+        }
+
+        public TEntity Update(TEntity entity)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+            return entity;
         }
     }
 }

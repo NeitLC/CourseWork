@@ -48,7 +48,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label" asp-for="TagsJson">@Localizer["Tags"]</label>
-            <input id="tagsInput" asp-for="TagsJson" value="@Model.TagsJson" required />
+            <input id="tagsInput" asp-for="TagsJson" value="@Model.TagsJson"/>
             <span asp-validation-for="TagsJson"></span>
         </div>
         @Html.AddExtraFields(Model)

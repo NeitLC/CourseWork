@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Collections.ViewModels;
 using CourseWork.Business.Dto;
 using CourseWork.Business.Interfaces;
 using CourseWork.Business.Utils;
+using CourseWork.Domain.Models;
 using HeyRed.MarkdownSharp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,13 +33,14 @@ namespace Collections.Controllers
             
             var markdown = new Markdown();
             
-            foreach (var entity in collections.Entities)
+            foreach(var entity in collections.Entities)
             {
                 entity.Description = markdown.Transform(entity.Description);
             }
-
+            
             ViewData["userId"] = userId;
             Response.Cookies.Append("collectionPage", page.ToString());
+            
             return View(collections);
         }
 
@@ -70,10 +73,15 @@ namespace Collections.Controllers
             try
             {
                 var collectionDto = await _collectionService.GetCollection(collectionId);
+                
                 Response.Cookies.Append("collectionId",collectionId.ToString());
+                
                 var collection = MapperUtil.Map<CollectionDto, CollectionViewModel>(collectionDto);
+                
                 await _collectionService.CheckRights(User, collectionId);
+                
                 ViewData["userId"] = userId;
+                
                 return View("Form", collection);
             }
             catch

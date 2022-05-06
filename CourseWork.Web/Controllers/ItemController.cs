@@ -144,7 +144,15 @@ namespace Collections.Controllers
             
             return View("Item", model);
         }
-
+        
+        [HttpPost]
+        [Route("/Like")]
+        public async Task<LikeViewModel> LikeItem(int itemId)
+        {
+            var likeDto = await _itemService.LikeItem(User, itemId);
+            return MapperUtil.Map<LikeDto, LikeViewModel>(likeDto);
+        }
+        
         [Route("/Tags")]
         public EntityPageDto<Tag> GetTags(string input)
         {

@@ -9,6 +9,31 @@
     Layout = "_Layout";
 }
 
+<nav class="mt-2">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a asp-controller="Collection"
+               asp-action="Index"
+               asp-route-page="@Context.Request.Cookies["collectionPage"]"
+               asp-route-userId="@ViewData["userId"]">
+                @Localizer["Collections"]
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-action="Index"
+               asp-route-collectionId="@Model.Collection.Id"
+               asp-route-page="@Context.Request.Cookies["itemPage"]"
+               asp-route-isLiked="@Context.Request.Cookies["isLiked"]"
+               asp-route-isCommented="@Context.Request.Cookies["isCommented"]"
+               asp-route-sortOrder="@Context.Request.Cookies["sortOrder"]"
+               asp-route-userId="@ViewData["userId"]">
+                @Localizer["Items"]
+            </a>
+        </li>
+        <li class="breadcrumb-item active">@Localizer["Item"]</li>
+    </ol>
+</nav>
+
 <div class="row">
     <div class="col-8 mx-auto">
         <div class="card p-3 mb-1 rounded">

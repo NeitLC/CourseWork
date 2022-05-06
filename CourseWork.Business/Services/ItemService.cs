@@ -67,7 +67,7 @@ namespace CourseWork.Business.Services
             Func<Item, object> sortPredicate = null;
             if (sortState == ItemSort.Like)
             {
-                sortPredicate = item => item.UsersLiked.Count();
+                sortPredicate = item => item.UsersLiked.Count;
             }
             return UnitOfWork.Items.Paginate(
                 page: page,
@@ -174,7 +174,6 @@ namespace CourseWork.Business.Services
             
             model.Tags.Clear();
             await AddTags(model, tags);
-            await transaction.CommitAsync();
         }
 
         public async Task<int> DeleteItem(ClaimsPrincipal claimsPrincipal, int itemId)
@@ -194,7 +193,9 @@ namespace CourseWork.Business.Services
         {
             var user = await _accountService.GetCurrentUser(claimsPrincipal);
             var item = await UnitOfWork.Items.Get(itemId, item => item.UsersLiked);
+            
             var likeDto = new LikeDto();
+
             if (item.UsersLiked.Contains(user))
             {
                 item.UsersLiked.Remove(user);
@@ -207,8 +208,11 @@ namespace CourseWork.Business.Services
                 likeDto.Liked = true;
                 item.Likes += 1;
             }
+            
             likeDto.Count = item.Likes;
+            
             await UnitOfWork.SaveAsync();
+            
             return likeDto;
         }
 
@@ -223,6 +227,7 @@ namespace CourseWork.Business.Services
                 Text = commentDto.Text,
                 UserId = user.Id
             });
+            
             await UnitOfWork.SaveAsync();
         }
 

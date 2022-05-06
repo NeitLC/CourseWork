@@ -21,7 +21,7 @@ namespace CourseWork.Domain.Models
         public string Description { get; set; }
         
         [Required]
-        [Topic(new string[] { "Alcohol", "Books", "Postmarks", "Coins", "Clocks", "Comics", "Magnetics" })]
+        [Topic(new[] { "Alcohol", "Books", "Postmarks", "Coins", "Clocks", "Comics", "Magnetics" })]
         public string Topic { get; set; }
         
         [StringLength(50)]

@@ -86,16 +86,15 @@ namespace CourseWork.Business.Services
             var account = new Account(
                 _configuration["Cloudinary:Name"],
                 _configuration["Cloudinary:ApiKey"],
-                _configuration["Cloudinary:ApiSecret"]
-            );
-
+                _configuration["Cloudinary:ApiSecret"]);
+            
             var cloudinary = new Cloudinary(account);
             
             await DeleteImages(cloudinary, collection);
             
             foreach (var uploadResult in files.Select(file => cloudinary.Upload(new ImageUploadParams()
                      {
-                         File = new FileDescription(file.FileName, file.OpenReadStream())
+                         File = new FileDescription(file.FileName, file.OpenReadStream()),
                      })))
             {
                 UnitOfWork.Images.Add(new Image
@@ -117,8 +116,9 @@ namespace CourseWork.Business.Services
             
             collectionDto.User = await _accountService.GetCurrentUser(claimsPrincipal, userId);
             
-            var collection = UnitOfWork.Collections.Add(MapperUtil.Map<CollectionDto, Collection>(collectionDto));
-
+            var collection = UnitOfWork.Collections
+                .Add(MapperUtil.Map<CollectionDto, Collection>(collectionDto));
+            
             UnitOfWork.Collections.Add(collection);
             
             await UnitOfWork.SaveAsync();
@@ -132,17 +132,19 @@ namespace CourseWork.Business.Services
             string userId = "")
         {
             var user = await _accountService.GetCurrentUser(claimsPrincipal, userId);
-            return UnitOfWork.Collections.Paginate(page: page,
-                predicate: collection => collection.User == user,
-                includes: new Expression<Func<Collection, object>>[]
-                {
-                    collection => collection.Items, collection => collection.User
-                });
+            
+            return UnitOfWork.Collections.Paginate(
+                    page: page,
+                    predicate: collection => collection.User == user,
+                    includes: new Expression<Func<Collection, object>>[] {
+                        collection => collection.Images,
+                        collection => collection.User
+                    });
         }
 
         public async Task EditCollection(CollectionDto collectionDto, ClaimsPrincipal claimsPrincipal)
         {
-            var collection = await CheckRights(claimsPrincipal, collectionDto.Id);
+            var collection = await CheckRights(claimsPrincipal,(int)collectionDto.Id);
             
             await using var transaction = await UnitOfWork.Context.Database.BeginTransactionAsync();
             
@@ -152,7 +154,7 @@ namespace CourseWork.Business.Services
             
             UnitOfWork.Collections.Update(collection);
             
-            await UploadImages(collection, new List<IFormFile>());
+            await UploadImages(collection, collectionDto.Files);
             await UnitOfWork.SaveAsync();
             await transaction.CommitAsync();
         }
