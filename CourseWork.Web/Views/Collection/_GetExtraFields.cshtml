@@ -1,14 +1,18 @@
 @using CourseWork.Domain.Enums
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Collections.ViewModels.ExtraFieldViewModel
+
+@inject IViewLocalizer Localizer
 
 @functions
 {
-    private bool CheckOptions(FieldType options, FieldType choice)
+    private static bool CheckOptions(FieldType options, FieldType choice)
     {
         return options == choice;
     }
 
-    private int ConvertFieldType(FieldType fieldType)
+    private static int ConvertFieldType(FieldType fieldType)
     {
         return (int) fieldType;
     }
@@ -16,32 +20,32 @@
 
 <div class="row align-baseline">
     <div class="d-inline-block mb-3 mt-1 col-6">
-        <label class="form-label">FieldName</label>
+        <label class="form-label">@Localizer["FieldName"]</label>
         <input id="fieldType" type="text" class="form-control" name="@Model.Prefix.ToLower()FieldName" value="@Model.Name" required />
         <span asp-validation-for="Name"></span>
     </div>
     <div class="d-inline-block mb-3 mt-1 col-6">
-        <label class="form-label">FieldType</label>
+        <label class="form-label">@Localizer["FieldType"]</label>
         <select class="form-control" name="@Model.Prefix.ToLower()FieldType" required>
             <option value="@ConvertFieldType(FieldType.Integer)"
                     selected="@CheckOptions(Model.FieldType, FieldType.Integer)">
-                Integer
+                @Localizer["Integer"]
             </option>
             <option value="@ConvertFieldType(FieldType.String)"
                     selected="@CheckOptions(Model.FieldType, FieldType.String)">
-                String
+                @Localizer["String"]
             </option>
             <option value="@ConvertFieldType(FieldType.Markdown)"
                     selected="@CheckOptions(Model.FieldType, FieldType.Markdown)">
-                Markdown
+                @Localizer["Markdown"]
             </option>
             <option value="@ConvertFieldType(FieldType.Date)"
                     selected="@CheckOptions(Model.FieldType, FieldType.Date)">
-                Date
+                @Localizer["Date"]
             </option>
             <option value="@ConvertFieldType(FieldType.Boolean)"
                     selected="@CheckOptions(Model.FieldType, FieldType.Boolean)">
-                Boolean
+                @Localizer["Boolean"]
             </option>
         </select>
     </div>

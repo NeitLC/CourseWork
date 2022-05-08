@@ -1,6 +1,9 @@
 @using Collections.ViewModels
+@using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Collections.ViewModels.CollectionViewModel
+
+@inject IViewLocalizer Localizer
 
 @{
     Layout = "_Layout";
@@ -10,6 +13,20 @@
 <link rel="stylesheet" href="~/lib/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css" />
 <link rel="stylesheet" href="~/lib/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.min.css" />
 
+<nav class="mt-2">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a asp-controller="Collection"
+               asp-action="Index"
+               asp-route-page="@Context.Request.Cookies["collectionPage"]"
+               asp-route-userId="@ViewData["userId"]">
+                @Localizer["Collections"]
+            </a>
+        </li>
+        <li class="breadcrumb-item active">@Localizer["Collection"]</li>
+    </ol>
+</nav>
+
 <div class="col-5 mt-2 mx-auto">
     <form id="collectionForm"
           class="my-2 needs-validation"
@@ -18,17 +35,17 @@
           asp-route-collectionId="@Model.Id"
           enctype="multipart/form-data">
         <div class="mb-3">
-            <label asp-for="Name" class="form-label">Name</label>
+            <label asp-for="Name" class="form-label">@Localizer["Name"]</label>
             <input asp-for="Name" type="text" class="form-control" required />
             <span asp-validation-for="Name"></span>
         </div>
         <div class="mb-3">
-            <label asp-for="Description">Description</label>
+            <label asp-for="Description">@Localizer["Description"]</label>
             <textarea class="form-control" placeholder="Description..." asp-for="Description" required></textarea>
             <span asp-validation-for="Description"></span>
         </div>
         <div class="mb-3">
-            <label class="form-label" asp-for="Topic">Topic</label>
+            <label class="form-label" asp-for="Topic">@Localizer["Topic"]</label>
             <select class="form-control" asp-for="Topic" required>
                 @foreach (var topic in Model.Topics)
                 {
@@ -46,7 +63,7 @@
         @await Html.PartialAsync("_GetExtraFields", new ExtraFieldViewModel { Prefix = "Second", Name = Model.SecondFieldName, FieldType = Model.SecondFieldType })
         @await Html.PartialAsync("_GetExtraFields", new ExtraFieldViewModel { Prefix = "Third", Name = Model.ThirdFieldName, FieldType = Model.ThirdFieldType })
         <div class="mb-5 pb-3">
-            <button id="submitAll" class="btn btn-primary d-block mx-auto w-50" type="submit">Submit</button>
+            <button id="submitAll" class="btn btn-primary d-block mx-auto w-50" type="submit">@Localizer["Submit"]</button>
         </div>
     </form>
 </div>

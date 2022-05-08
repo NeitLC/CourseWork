@@ -86,7 +86,8 @@ namespace CourseWork.Business.Services
             var account = new Account(
                 _configuration["Cloudinary:Name"],
                 _configuration["Cloudinary:ApiKey"],
-                _configuration["Cloudinary:ApiSecret"]);
+                _configuration["Cloudinary:ApiSecret"]
+                );
             
             var cloudinary = new Cloudinary(account);
             
@@ -194,7 +195,7 @@ namespace CourseWork.Business.Services
             return UnitOfWork.Context.Collections
                 .IncludeMultiple(collection => collection.Images, collection => collection.User)
                 .OrderByDescending(collection => collection.Items.Count())
-                .Take(8);
+                .Take(6);
         }
 
         public async Task<Collection> CheckRights(ClaimsPrincipal claimsPrincipal, int id)

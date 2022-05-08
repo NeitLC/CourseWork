@@ -10,9 +10,11 @@
       <PackageReference Include="AspNet.Security.OAuth.Reddit" Version="5.0.18" />
       <PackageReference Include="AutoMapper" Version="11.0.1" />
       <PackageReference Include="CloudinaryDotNet" Version="1.17.0" />
+      <PackageReference Include="Localization.AspNetCore.TagHelpers" Version="0.6.0" />
       <PackageReference Include="Markdown" Version="2.2.1" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.15" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.16" />
+      <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.16" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.8">
           <PrivateAssets>all</PrivateAssets>
@@ -26,10 +28,8 @@
       <ProjectReference Include="..\CourseWork.Business\CourseWork.Business.csproj" />
     </ItemGroup>
 
-
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="Views\Account\Login.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Account\Register.cshtml" />
+        <Folder Include="wwwroot\img\" />
     </ItemGroup>
-
+    
 </Project>

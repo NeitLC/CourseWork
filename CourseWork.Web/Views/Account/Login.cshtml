@@ -1,41 +1,13 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Collections.ViewModels.LoginViewModel
+
+@inject IViewLocalizer Localizer
 
 @{
      Layout = "_Layout";
 }
 
-@* <div class="container my-2"> *@
-@*     <div class="row"> *@
-@*         <div class="offset-3 col-6"> *@
-@*             <div class="card"> *@
-@*                 <div class="card-body"> *@
-@*                     <div class="card-title text-center"> *@
-@*                         <h5 class="card-title">Sign in</h5> *@
-@*                     </div> *@
-@*                     <form method="post" asp-controller="Account" asp-action="Login"> *@
-@*                         <div asp-validation-summary="ModelOnly"></div> *@
-@*                         <div class="mb-3"> *@
-@*                             <label asp-for="Username" class="form-label">Username</label> *@
-@*                             <input asp-for="Username" class="form-control" required> *@
-@*                             <span asp-validation-for="Username"></span> *@
-@*                         </div> *@
-@*                         <div class="mb-3"> *@
-@*                             <label asp-for="Password" class="form-label">Password</label> *@
-@*                             <input asp-for="Password" class="form-control" type="password" required> *@
-@*                             <span asp-validation-for="Password"></span> *@
-@*                         </div> *@
-@*                         <div class="d-flex justify-content-center"> *@
-@*                             <button type="submit" class="btn btn-primary w-50">Submit</button> *@
-@*                         </div> *@
-@*                     </form> *@
-@*                     <div class="text-center"> *@
-@*                         <p>Not a member? <a asp-controller="Account" asp-action="Register">Register</a></p> *@
-@*                     </div> *@
-@*                 </div> *@
-@*             </div> *@
-@*         </div> *@
-@*     </div> *@
-@* </div> *@
 <section class="vh-100">
   <div class="container-fluid h-custom">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -76,11 +48,11 @@
           <div class="text-center text-lg-start mt-4 pt-2">
             <button type="submit" class="btn btn-primary btn-lg"
                     style="padding-left: 2.5rem; padding-right: 2.5rem;">
-              Sign In
+              Sign in
             </button>
             
             <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? 
-              <a class="nav-link" asp-controller="Account" asp-action="Register" >Sign Up</a>
+              <a class="nav-link" asp-controller="Account" asp-action="Register" >Sign up</a>
             </p>
             
           </div>
@@ -88,29 +60,4 @@
       </div>
     </div>
   </div>
-  @* <div *@
-  @*   class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary"> *@
-  @*   <!-- Copyright --> *@
-  @*   <div class="text-white mb-3 mb-md-0"> *@
-  @*     Copyright © 2020. All rights reserved. *@
-  @*   </div> *@
-  @*   <!-- Copyright --> *@
-  @* *@
-  @*   <!-- Right --> *@
-  @*   <div> *@
-  @*     <a href="#!" class="text-white me-4"> *@
-  @*       <i class="fab fa-facebook-f"></i> *@
-  @*     </a> *@
-  @*     <a href="#!" class="text-white me-4"> *@
-  @*       <i class="fab fa-twitter"></i> *@
-  @*     </a> *@
-  @*     <a href="#!" class="text-white me-4"> *@
-  @*       <i class="fab fa-google"></i> *@
-  @*     </a> *@
-  @*     <a href="#!" class="text-white"> *@
-  @*       <i class="fab fa-linkedin-in"></i> *@
-  @*     </a> *@
-  @*   </div> *@
-  @*   <!-- Right --> *@
-  @* </div> *@
 </section>

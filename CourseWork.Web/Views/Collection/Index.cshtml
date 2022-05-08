@@ -1,4 +1,7 @@
+@using Microsoft.AspNetCore.Mvc.Localization
 @model CourseWork.Domain.Dto.EntityPageDto<CourseWork.Domain.Models.Collection>
+
+@inject IViewLocalizer Localizer
 
 @{
     Layout = "_Layout";
@@ -7,7 +10,7 @@
 @if (!Model.Entities.Any() && Model.Page.PageNumber == 1)
 {
     <div class="col-md-12 text-center mt-5">
-        <h5>Empty</h5>
+        <h5>@Localizer["NoCollections"]</h5>
     </div>
 }
 else

@@ -291,13 +291,13 @@ namespace CourseWork.Domain.Migrations
 
             modelBuilder.Entity("ItemUser", b =>
                 {
-                    b.Property<int>("ItemsId")
+                    b.Property<int>("LikedItemsId")
                         .HasColumnType("integer");
 
                     b.Property<string>("UsersLikedId")
                         .HasColumnType("text");
 
-                    b.HasKey("ItemsId", "UsersLikedId");
+                    b.HasKey("LikedItemsId", "UsersLikedId");
 
                     b.HasIndex("UsersLikedId");
 
@@ -503,7 +503,7 @@ namespace CourseWork.Domain.Migrations
                 {
                     b.HasOne("CourseWork.Domain.Models.Item", null)
                         .WithMany()
-                        .HasForeignKey("ItemsId")
+                        .HasForeignKey("LikedItemsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

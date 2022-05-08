@@ -15,6 +15,7 @@ using CourseWork.Domain.Dto;
 using CourseWork.Domain.Extension;
 using CourseWork.Domain.Interfaces;
 using CourseWork.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CourseWork.Business.Services
 {
@@ -263,7 +264,27 @@ namespace CourseWork.Business.Services
 
         public IEnumerable<Item> GetItemsFullTextSearch(string query)
         {
-            throw new NotImplementedException();
+            if (!string.IsNullOrEmpty(query))
+            {
+                return UnitOfWork.Context.Items.Where(
+                        item => EF.Functions.FreeText(EF.Property<string>(item, "Name"), query)
+                                || EF.Functions.FreeText(EF.Property<string>(item.Collection, "Name"), query)
+                                || EF.Functions.FreeText(EF.Property<string>(item.Collection, "Topic"), query)
+                                || EF.Functions.FreeText(EF.Property<string>(item.Collection, "Description"), query)
+                                || item.Comments.Any(
+                                    comment => EF.Functions.FreeText(EF.Property<string>(comment, "Text"), query))
+                                || item.Tags.Any(
+                                    tag => EF.Functions.FreeText(EF.Property<string>(tag, "Name"), query))
+                    )
+                    .IncludeMultiple(
+                        item => item.Collection,
+                        item => item.Tags,
+                        item => item.Comments,
+                        item => item.UsersLiked)
+                    .ToList();
+            }
+            return new List<Item>();
+            // throw new NotImplementedException();
         }
     }
 }

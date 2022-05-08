@@ -1,5 +1,12 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Collections.ViewModels;
+using CourseWork.Business.Dto;
+using CourseWork.Business.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -7,21 +14,45 @@ namespace Collections.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IItemService _itemService;
+        private readonly ICollectionService _collectionService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IItemService itemService, ICollectionService collectionService)
         {
-            _logger = logger;
+            _itemService = itemService;
+            _collectionService = collectionService;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View(new HomeViewModel
+            {
+                LastCreatedItems = _itemService.GetLastCreatedItems(),
+                LargestNumberItems = _collectionService.GetLargestItemsCount()
+            });
         }
 
-        public IActionResult Privacy()
+        public IActionResult GetAllCollections(int page = 1)
         {
-            return View();
+            Response.Cookies.Append("collectionPage", page.ToString());
+            ViewData["action"] = "GetAllCollections";
+            ViewData["controller"] = "Home";
+            return View("../Collection/Index", _collectionService.GetAllCollections(page));
+        }
+        
+        public IEnumerable<TagDto> GetTagsCloud()
+        {
+            return _itemService.GetTagsCloud();
+        }
+        
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1)});
+            return LocalRedirect(returnUrl);
         }
     }
 }

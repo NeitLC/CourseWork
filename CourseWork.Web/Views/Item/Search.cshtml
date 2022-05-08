@@ -1,0 +1,11 @@
+@using CourseWork.Domain.Dto
+@using CourseWork.Domain.Models
+@model IEnumerable<CourseWork.Domain.Models.Item>
+
+@{
+    Layout = "_Layout";
+}
+
+@await Html.PartialAsync("../_Items", new EntityPageDto<Item> { Entities = Model})
+
+<script src="~/js/profile.js"></script>

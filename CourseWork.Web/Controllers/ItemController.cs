@@ -158,5 +158,20 @@ namespace Collections.Controllers
         {
             return _itemService.GetTags(input);
         }
+        
+        [AllowAnonymous]
+        [Route("/Items")]
+        public IActionResult GetItemsByTag([FromQuery] string tag)
+        {
+            return View("Search", _itemService.GetItemsByTag(tag));
+        }
+        
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("/FullTextSearch")]
+        public IActionResult GetItemsFullTextSearch([FromQuery] string query)
+        {
+            return View("Search", _itemService.GetItemsFullTextSearch(query));
+        }
     }
 }
