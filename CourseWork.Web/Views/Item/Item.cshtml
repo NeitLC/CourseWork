@@ -1,7 +1,7 @@
-@using Collections.Utils
 @using CourseWork.Domain.Enums
+@using CourseWork.Web.Utils
 @using Microsoft.AspNetCore.Mvc.Localization
-@model Collections.ViewModels.ItemViewModel
+@model CourseWork.Web.ViewModels.ItemViewModel
 
 @inject IViewLocalizer Localizer
 
@@ -16,7 +16,7 @@
                asp-action="Index"
                asp-route-page="@Context.Request.Cookies["collectionPage"]"
                asp-route-userId="@ViewData["userId"]">
-                Collections
+                @Localizer["Collections"]
             </a>
         </li>
         <li class="breadcrumb-item">
@@ -27,10 +27,10 @@
                asp-route-isCommented="@Context.Request.Cookies["isCommented"]"
                asp-route-sortOrder="@Context.Request.Cookies["sortOrder"]"
                asp-route-userId="@ViewData["userId"]">
-                Items
+                @Localizer["Items"]
             </a>
         </li>
-        <li class="breadcrumb-item active">Item</li>
+        <li class="breadcrumb-item active">@Localizer["Item"]</li>
     </ol>
 </nav>
 
@@ -90,10 +90,10 @@
                         <p class="mb-0">@comment.Text<p>
                     </div>
                 }
-                @if (Model.Comments.Page.TotalPages > 1)
-                {
-                    @await Html.PartialAsync("../_Pagination", Model.Comments.Page)
-                }
+                 @if (Model.Comments.Page.TotalPages > 1)
+                 {
+                     @await Html.PartialAsync("../_Pagination", Model.Comments.Page)
+                 }
             }
             else
             {

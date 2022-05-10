@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using CourseWork.Domain.Dto;
 using CourseWork.Domain.Models;
 
-namespace Collections.ViewModels
+namespace CourseWork.Web.ViewModels
 {
     public class ItemViewModel
     {

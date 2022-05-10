@@ -1,11 +1,10 @@
 ﻿using System.IO;
 using System.Text.Encodings.Web;
-using Collections.Utils;
-using Collections.ViewModels;
+using CourseWork.Web.ViewModels;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Collections.Helpers
+namespace CourseWork.Web.Utils
 {
     public static class ItemHelper
     {

@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using Collections.ViewModels;
 using CourseWork.Business.Dto;
 using CourseWork.Business.Interfaces;
+using CourseWork.Web.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Collections.Controllers
+namespace CourseWork.Web.Controllers
 {
     public class HomeController : Controller
     {

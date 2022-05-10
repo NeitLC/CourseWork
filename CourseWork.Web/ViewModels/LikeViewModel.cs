@@ -1,4 +1,4 @@
-namespace Collections.ViewModels
+namespace CourseWork.Web.ViewModels
 {
     public class LikeViewModel
     {

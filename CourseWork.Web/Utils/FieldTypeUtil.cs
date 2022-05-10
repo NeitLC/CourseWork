@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Collections.ViewModels;
 using CourseWork.Domain.Enums;
 using CourseWork.Domain.Models;
+using CourseWork.Web.ViewModels;
 
-namespace Collections.Utils
+namespace CourseWork.Web.Utils
 {
     public static class FieldTypeUtil
     {

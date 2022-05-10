@@ -1,18 +1,14 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Collections.ViewModels;
 using CourseWork.Business.Dto;
 using CourseWork.Business.Interfaces;
 using CourseWork.Business.Utils;
-using CourseWork.Domain.Models;
+using CourseWork.Web.ViewModels;
 using HeyRed.MarkdownSharp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace Collections.Controllers
+namespace CourseWork.Web.Controllers
 {
     [Authorize]
     public class CollectionController : Controller

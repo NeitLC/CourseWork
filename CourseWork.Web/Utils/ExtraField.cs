@@ -1,6 +1,6 @@
 ﻿using CourseWork.Domain.Enums;
 
-namespace Collections.Utils
+namespace CourseWork.Web.Utils
 {
     public class ExtraField
     {

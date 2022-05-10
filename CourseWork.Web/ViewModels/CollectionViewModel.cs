@@ -4,7 +4,7 @@ using CourseWork.Domain.Enums;
 using CourseWork.Domain.Models;
 using Microsoft.AspNetCore.Http;
 
-namespace Collections.ViewModels
+namespace CourseWork.Web.ViewModels
 {
     public class CollectionViewModel
     {

@@ -1,11 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using Collections.ViewModels;
 using CourseWork.Business.Interfaces;
+using CourseWork.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Collections.Controllers
+namespace CourseWork.Web.Controllers
 {
     public class AccountController : Controller
     {

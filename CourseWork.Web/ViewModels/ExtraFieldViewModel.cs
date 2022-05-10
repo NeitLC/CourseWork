@@ -1,6 +1,6 @@
 using CourseWork.Domain.Enums;
 
-namespace Collections.ViewModels
+namespace CourseWork.Web.ViewModels
 {
     public class ExtraFieldViewModel
     {

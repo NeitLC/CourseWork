@@ -1,9 +1,8 @@
-﻿@using Microsoft.AspNetCore.Mvc.Rendering
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.Rendering
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model Collections.ViewModels.HomeViewModel; 
-@using Microsoft.AspNetCore.Mvc.Localization
-
 @inject IViewLocalizer Localizer
+@model CourseWork.Web.ViewModels.HomeViewModel; 
 
 @{
     Layout = "_Layout";
@@ -13,8 +12,8 @@
     <section class="py-5 text-center container main-bg">
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto text-white">
-                <h1 class="fw-bold ">@Localizer["Name"]</h1>
-                <p class="lead">
+                <h1 class="fw-bold text-black-50">@Localizer["Name"]</h1>
+                <p class="lead text-black-50">
                     @Localizer["Message"]
                 </p>
                 <p>
@@ -32,7 +31,7 @@
         <div class="container">
             <h3 class="py-3">@Localizer["MessageLargestItems"]</h3>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                @{int i = 0;}
+                @{var i = 0;}
                 @foreach (var collection in Model.LargestNumberItems)
                 {
                     <div class="col">
@@ -41,7 +40,7 @@
                             {
                                 <div id="carouselControls@(i)" class="carousel slide h-50" data-interval="false">
                                     <div class="carousel-inner h-100">
-                                        @{int j = 0;}
+                                        @{var j = 0;}
                                         @foreach (var image in collection.Images)
                                         {
                                             <div class="carousel-item @(j == 0 ? "active" : "") h-100">
@@ -54,18 +53,13 @@
                                     </div>
                                     @if (collection.Images.Count > 1)
                                     {
-                                        <button class="carousel-control-prev"
-                                                type="button"
-                                                data-target="#carouselControls@(i)"
-                                                data-slide="prev">
+                                        <button class="carousel-control-prev" type="button" data-target="#carouselControls@(i)" data-slide="prev">
                                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">@Localizer["Previous"]</span>
+                                            <span class="sr-only">@Localizer["Previous"]</span>
                                         </button>
-                                        <button class="carousel-control-next" type="button"
-                                                data-target="#carouselControls@(i)"
-                                                data-slide="next">
+                                        <button class="carousel-control-next" type="button" data-target="#carouselControls@(i)" data-slide="next">
                                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">@Localizer["Next"]</span>
+                                            <span class="sr-only">@Localizer["Next"]</span>
                                         </button>
                                     }
                                 </div>

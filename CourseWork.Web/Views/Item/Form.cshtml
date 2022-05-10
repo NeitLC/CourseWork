@@ -1,6 +1,6 @@
-﻿@using Collections.Helpers
+﻿@using CourseWork.Web.Utils
 @using Microsoft.AspNetCore.Mvc.Localization
-@model Collections.ViewModels.ItemViewModel
+@model CourseWork.Web.ViewModels.ItemViewModel
 
 @inject IViewLocalizer Localizer
 
@@ -15,7 +15,7 @@
                asp-action="Index"
                asp-route-page="@Context.Request.Cookies["collectionPage"]"
                asp-route-userId="@ViewData["userId"]">
-                Collections
+                @Localizer["Collections"]
             </a>
         </li>
         <li class="breadcrumb-item">
@@ -26,10 +26,10 @@
                asp-route-isCommented="@Context.Request.Cookies["isCommented"]"
                asp-route-sortOrder="@Context.Request.Cookies["sortOrder"]"
                asp-route-userId="@ViewData["userId"]">
-                Items
+                @Localizer["Items"]
             </a>
         </li>
-        <li class="breadcrumb-item active">Item</li>
+        <li class="breadcrumb-item active">@Localizer["Item"]</li>
     </ol>
 </nav>
 

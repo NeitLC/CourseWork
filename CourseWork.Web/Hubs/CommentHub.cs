@@ -4,7 +4,7 @@ using CourseWork.Business.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Collections.Hubs
+namespace CourseWork.Web.Hubs
 {
     [Authorize]
     public class CommentHub : Hub

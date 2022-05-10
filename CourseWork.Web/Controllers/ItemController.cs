@@ -1,16 +1,16 @@
 ﻿using System.Threading.Tasks;
-using Collections.ViewModels;
 using CourseWork.Business.Dto;
 using CourseWork.Business.Enums;
 using CourseWork.Business.Interfaces;
 using CourseWork.Business.Utils;
 using CourseWork.Domain.Dto;
 using CourseWork.Domain.Models;
+using CourseWork.Web.ViewModels;
 using HeyRed.MarkdownSharp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Collections.Controllers
+namespace CourseWork.Web.Controllers
 {
     [Authorize]
     public class ItemController : Controller

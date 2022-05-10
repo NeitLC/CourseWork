@@ -19,7 +19,8 @@ iframe {
 
 .main-bg
 {
-    background-image: url("../img/background.png");
+    color: black;
+    background-image: url("../img/background.jpg");
     background-size: cover;
 }
 

@@ -3,7 +3,7 @@ using CourseWork.Business.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Collections.Controllers
+namespace CourseWork.Web.Controllers
 {
     [Authorize(Roles = "admin")]
     public class AdminController : Controller

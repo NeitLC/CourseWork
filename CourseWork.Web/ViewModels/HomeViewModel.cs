@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using CourseWork.Domain.Models;
 
-namespace Collections.ViewModels
+namespace CourseWork.Web.ViewModels
 {
     public class HomeViewModel
     {

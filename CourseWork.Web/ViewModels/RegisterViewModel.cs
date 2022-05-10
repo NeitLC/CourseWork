@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Collections.ViewModels
+namespace CourseWork.Web.ViewModels
 {
     public class RegisterViewModel
     {

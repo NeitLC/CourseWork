@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Collections.Hubs;
 using CourseWork.Business.Interfaces;
 using CourseWork.Business.Services;
 using CourseWork.Domain.Data;
 using CourseWork.Domain.Interfaces;
 using CourseWork.Domain.Models;
 using CourseWork.Domain.Repositories;
+using CourseWork.Web.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -63,13 +63,11 @@ namespace Collections
                     facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
                     facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                     facebookOptions.SignInScheme = IdentityConstants.ExternalScheme;
+                }).AddReddit(redditOptions => {
+                    redditOptions.ClientId = Configuration["Authentication:Reddit:AppId"];
+                    redditOptions.ClientSecret = Configuration["Authentication:Reddit:AppSecret"];
+                    redditOptions.SignInScheme = IdentityConstants.ExternalScheme;
                 });
-                    // .AddReddit(redditOptions =>
-                // {
-                //     redditOptions.ClientId = Configuration["Authentication:Reddit:ClientId"];
-                //     redditOptions.ClientSecret = Configuration["Authentication:Reddit:ClientSecret"];
-                //     redditOptions.SignInScheme = IdentityConstants.ExternalScheme;
-                // });
             
             services.AddSignalR();
             
