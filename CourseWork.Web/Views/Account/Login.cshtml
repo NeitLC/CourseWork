@@ -19,14 +19,14 @@
         <form method="post" asp-controller="Account" asp-action="Login">
           <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
             <p class="lead fw-normal mb-0 me-3">@Localizer["SignInWith"]</p>
-            <a class="btn btn-primary w-auto btn-floating mx-1"
+            <a class="btn btn-primary w-50 btn-floating mx-1"
                asp-controller="Account"
                asp-action="SetLogin"
-               asp-route-provider="Google">
+               asp-route-provider="Facebook">
               <i class="bi bi-facebook"></i>
               Facebook
             </a>
-            <a class="btn btn-primary w-auto btn-floating mx-1"
+            <a class="btn btn-primary w-50 btn-floating mx-1"
                asp-controller="Account"
                asp-action="SetLogin"
                asp-route-provider="Reddit">
