@@ -67,6 +67,10 @@ namespace Collections
                     redditOptions.ClientId = Configuration["Authentication:Reddit:AppId"];
                     redditOptions.ClientSecret = Configuration["Authentication:Reddit:AppSecret"];
                     redditOptions.SignInScheme = IdentityConstants.ExternalScheme;
+                }).AddGoogle(googleOptions => {
+                    googleOptions.ClientId = Configuration["Authentication:Google:AppId"];
+                    googleOptions.ClientSecret = Configuration["Authentication:Google:AppSecret"];
+                    googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
                 });
             
             services.AddSignalR();
