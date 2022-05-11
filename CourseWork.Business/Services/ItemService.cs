@@ -255,6 +255,7 @@ namespace CourseWork.Business.Services
             return UnitOfWork.Items.Find(
                 item => item.Tags.Any(itemTag => itemTag.Name == tag),
                 includes: new Expression<Func<Item, object>>[] {
+                    item => item.Collection.User,
                     item => item.Collection,
                     item => item.Tags,
                     item => item.Comments,
