@@ -33,7 +33,7 @@ namespace Collections
         {
             services.AddDbContext<ApplicationContext>(options => 
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
-                b => b.MigrationsAssembly("CollectionApp.Domain")));
+                b => b.MigrationsAssembly("CourseWork.Domain")));
             
             services.AddIdentity<User, IdentityRole>(options => 
             {

@@ -8,11 +8,11 @@ namespace CourseWork.Domain.Dto
         public int TotalPages { get; set; }
         public int PageSize { get; set; }
 
-        public Page(int pageNumber, int pageSize, int count)
+        public Page(int count, int pageNumber, int pageSize)
         {
-            PageSize   = pageSize;
+            PageSize = pageSize;
             PageNumber = pageNumber;
-            TotalPages = (int)Math.Ceiling(count/(double)pageSize);
+            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
         }
 
         public bool HasNextPage => PageNumber < TotalPages;
