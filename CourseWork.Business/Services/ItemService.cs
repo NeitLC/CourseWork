@@ -264,7 +264,44 @@ namespace CourseWork.Business.Services
 
         public IEnumerable<Item> GetItemsFullTextSearch(string query)
         {
-            throw new NotImplementedException();
+            // if (!string.IsNullOrEmpty(query))
+            // {
+            //     return UnitOfWork.Context.Items.Where(
+            //             item => EF.Functions.FreeText(EF.Property<string>(item, "Name"), query)
+            //                     || EF.Functions.FreeText(EF.Property<string>(item.Collection, "Name"), query)
+            //                     || EF.Functions.FreeText(EF.Property<string>(item.Collection, "Topic"), query)
+            //                     || EF.Functions.FreeText(EF.Property<string>(item.Collection, "ShortDescription"), query)
+            //                     || item.Comments.Any(
+            //                         comment => EF.Functions.FreeText(EF.Property<string>(comment, "Text"), query))
+            //                     || item.Tags.Any(
+            //                         tag => EF.Functions.FreeText(EF.Property<string>(tag, "Name"), query))
+            //         )
+            //         .IncludeMultiple(
+            //             item => item.Collection,
+            //             item => item.Tags,
+            //             item => item.Comments,
+            //             item => item.UsersLiked)
+            //         .ToList();
+            // }
+            // return new List<Item>();
+            if (!string.IsNullOrEmpty(query))
+            {
+                return UnitOfWork.Context.Items.Where(
+                        item => item.Name.Contains(query)
+                                || item.Collection.Name.Contains(query)
+                                || item.Collection.Topic.Contains(query)
+                                || item.Collection.Description.Contains(query)
+                                || item.Comments.Any(comment => comment.Text.Contains(query))
+                                || item.Tags.Any(tag => tag.Name.Contains(query))
+                    ).IncludeMultiple(
+                        item => item.Collection,
+                        item => item.Tags,
+                        item => item.Comments,
+                        item => item.UsersLiked
+                    )
+                    .ToList();
+            }
+            return new List<Item>();
         }
     }
 }
