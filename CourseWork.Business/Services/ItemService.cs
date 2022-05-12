@@ -75,6 +75,7 @@ namespace CourseWork.Business.Services
                 predicate: predicate,
                 sortPredicate: sortPredicate,
                 includes: new Expression<Func<Item, object>>[] {
+                    item => item.Collection.User,
                     item => item.Tags,
                     item => item.Comments,
                     item => item.UsersLiked
