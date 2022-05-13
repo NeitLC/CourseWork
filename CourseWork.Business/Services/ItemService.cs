@@ -161,8 +161,7 @@ namespace CourseWork.Business.Services
 
         public async Task EditItem(ClaimsPrincipal claimsPrincipal, ItemDto itemDto)
         {
-            if (itemDto.CollectionId != null)
-                await _collectionService.CheckRights(claimsPrincipal, (int) (itemDto.CollectionId));
+            await _collectionService.CheckRights(claimsPrincipal, (int)(itemDto.CollectionId));
             
             await using var transaction = await UnitOfWork.Context.Database.BeginTransactionAsync();
             
@@ -176,13 +175,14 @@ namespace CourseWork.Business.Services
             
             model.Tags.Clear();
             await AddTags(model, tags);
+            await transaction.CommitAsync();
         }
 
         public async Task<int> DeleteItem(ClaimsPrincipal claimsPrincipal, int itemId)
         {
             var item = await GetItem(itemId);
 
-            var collectionId = (int) item.CollectionId;
+            var collectionId = (int)item.CollectionId;
             
             await _collectionService.CheckRights(claimsPrincipal, collectionId);
             await UnitOfWork.Items.Delete(itemId);
