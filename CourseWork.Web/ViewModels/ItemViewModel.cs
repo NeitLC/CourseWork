@@ -13,7 +13,7 @@ namespace CourseWork.Web.ViewModels
         [StringLength(50)]
         public string Name { get; set; }
         
-        public int LikesCount { get; set; } = 0;
+        public int likes { get; set; } = 0;
         
         public int? FirstInteger { get; set; }
         

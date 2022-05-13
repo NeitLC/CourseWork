@@ -71,7 +71,7 @@
                 class="btn @(Model.Liked ? "btn-danger" : "btn-light") d-block me-auto my-2 btn-sm px-3 like-btn"
                 @(User.Identity.IsAuthenticated ? "" : "disabled")>
             <i class="bi bi-suit-heart"></i>
-            <span id="likesCount">@Model.LikesCount</span>
+            <span id="likesCount">@Model.likes</span>
         </button>
         @if (User.Identity.IsAuthenticated)
         {
