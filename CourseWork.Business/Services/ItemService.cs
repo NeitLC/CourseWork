@@ -161,8 +161,9 @@ namespace CourseWork.Business.Services
 
         public async Task EditItem(ClaimsPrincipal claimsPrincipal, ItemDto itemDto)
         {
-            await _collectionService.CheckRights(claimsPrincipal, (int)(itemDto.CollectionId));
-            
+            if (itemDto.CollectionId != null)
+                await _collectionService.CheckRights(claimsPrincipal, (int) (itemDto.CollectionId));
+
             await using var transaction = await UnitOfWork.Context.Database.BeginTransactionAsync();
             
             var model = MapperUtil.Map<ItemDto, Item>(itemDto);
